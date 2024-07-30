@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <title>Document</title>
+    <style>
+      body {
+        background-color: #0b0b0d;
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+      }
+
+      .container {
+        height: 100vh;
+        padding: 0 60px;
+      }
+
+      .content-wrapper {
+        gap: 50px;
+        display: flex;
+        align-items: center;
+        height: 100vh;
+      }
+      .center {
+        width: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .banner-content {
+        margin-left: auto;
+        text-align: right;
+      }
+
+      .banner-content h1 {
+        font-weight: 700;
+        font-size: 45px;
+        line-height: 1.2;
+        letter-spacing: -1.5px;
+        color: #fff;
+      }
+
+      .banner-content p {
+        font-size: 18px;
+        line-height: 1.5;
+        color: #fff;
+        max-width: 470px;
+        margin: 30px auto 0;
+      }
+
+      #typewriter-text {
+        /* Customize styles for typewriter text */
+      }
+      .circle-container {
+        width: 96px;
+        height: 96px;
+        cursor: pointer;
+        border-radius: 50%;
+        position: relative;
+      }
+      @media (min-width: 768px) {
+        .circle-container {
+          width: 100px;
+          height: 100px;
+        }
+      }
+      .animate-bounce-y {
+        animation: bounce 2s infinite;
+      }
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+      .shadow-lg {
+        box-shadow: rgba(128, 255, 204, 0.2) 0px 0px 40px 23px;
+      }
+      .inside-shadow {
+        background: radial-gradient(
+          54.28% 54.28% at 50% 49.91%,
+          rgba(0, 0, 0, 0.11) 31.5%,
+          rgba(128, 255, 204, 0.1) 83.01%,
+          rgba(128, 255, 204, 0.26) 98%
+        );
+        box-shadow: inset rgba(128, 255, 204, 0.02) -5.604px -5.604px 280.193px
+          0px;
+          /* box-shadow: rgba(128, 255, 204, 0.2) 0px 0px 40px 23px; */
+        -webkit-backdrop-filter: blur(23.5362px);
+        backdrop-filter: blur(23.5362px);
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .backdrop-blur-2xl {
+        backdrop-filter: blur(30px);
+        -webkit-backdrop-filter: blur(30px);
+      }
+      .circle-icon {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+      }
+      .rotate {
+        animation: rotate 1s linear infinite;
+      }
+      @keyframes rotate {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      button {
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 20px;
+      }
+
+      .message-box {
+        height: 25px;
+        padding: 0 3px;
+        margin-top: 2px;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 100px;
+        box-shadow: rgba(128, 255, 204, 0.2) 0px 0px 8px 0.5px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(13.2px);
+        justify-content: center;
+        align-items: center;
+        gap: 2px;
+        display: inline-flex;
+        letter-spacing: 0.2px;
+        min-width: 82px;
+        opacity: 1;
+        transform: none;
+      }
+
+      .message-box .text-content {
+        color: #cbd5e0; /* Adjust to your text color preference */
+        font-size: 0.875rem; /* Corresponds to 14px assuming 16px base font size */
+        font-weight: normal;
+        font-family: sans-serif;
+        line-height: normal;
+        padding: 13px;
+      }
+      .box{
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        align-items: center;
+      }
+
+      @media (max-width: 1020px) {
+        .content-wrapper {
+          gap: 70px;
+          flex-direction: column-reverse;
+          justify-content: center;
+        }
+        .banner-content {
+          margin: 0 auto;
+        }
+        .banner-content h1 {
+          font-size: 35px;
+        }
+
+        .banner-content p {
+          font-size: 14px;
+        }
+        .center {
+          width: 100%;
+        }
+        .container {
+          padding: 0 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header></header>
+    <section id="home">
+      <div class="container">
+        <div class="content-wrapper">
+          <!-- <button id="startButton">Start to Talk</button> -->
+          <div class="center">
+            <div class="box">
+                <div id="circle" class="circle-container animate-bounce-y">
+                    <div class="shadow-lg inside-shadow">
+                      <div class="circle-icon">
+                        <button id="startButton">
+                          <i class="fas fa-microphone"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="backdrop-blur-2xl"></div>
+                  </div>
+      
+                  <div class="message-box">
+                    <p class="text-content" id="messageText">اضغط المايك لبدء المكالمة</p>
+                  </div>
+            </div>
+          </div>
+
+          <!-- <button id="startButton"><i class="fas fa-microphone"></i></button> -->
+          <div class="banner-content">
+            <div class="ar">
+              <h1 class="header-font">
+                <span class="sub-header" id="sub-head"> حجز موعد في عيادات سجال</span
+                >
+                <br />
+                <span class="sub-header" id="sub-head">
+                  <!-- <span id="typewriter-text">AI Agent</span> -->
+                </span>
+              </h1>
+              <p class="hjz-introduction">
+                شركة همس تقدم حلول مبتكرة تعتمد على الذكاء الاصطناعي لإنشاء وكلاء أفتراضين يمكنهم الرد على مكالمات عملائك على مدار 24 ساعة وطوال أيام الأسبوع. تهدف همس الى تحسين تجربة العملاء من خلال تقليل أوقات الانتظار وتقليل تكاليف التشغيلية للشركات
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.7/dist/bundle.min.js"></script>
+    <script>
+      class AudioStreamer {
+        constructor() {
+          this.audioQueue = [];
+          this.isPlaying = false;
+        }
+        async play(streamData) {
+          await new Promise((resolve) => {
+            this.audioQueue.push({ streamData, resolve });
+            if (!this.isPlaying) {
+              this.processQueue();
+            }
+          });
+        }
+        async processQueue() {
+          if (this.audioQueue.length > 0) {
+            this.isPlaying = true;
+            const { streamData, resolve } = this.audioQueue.shift();
+            const source = audioContext.createBufferSource();
+            source.buffer = streamData;
+            source.connect(audioContext.destination);
+            source.start(0);
+            source.onended = () => {
+              resolve();
+              this.isPlaying = false;
+              this.processQueue(); // Process the next stream in the queue
+            };
+          } else {
+            this.isPlaying = false;
+          }
+        }
+      }
+      let socket;
+      const audioContext = new (window.AudioContext ||
+        window.webkitAudioContext)();
+
+      const audioStreamer = new AudioStreamer();
+      async function playAudio(streamData) {
+        await audioStreamer.play(streamData);
+      }
+      // Function to convert audio buffer to WAV format
+function audioBufferToWav(buffer) {
+    const numOfChannels = buffer.numberOfChannels;
+    const length = buffer.length * numOfChannels * 2 + 44;
+    const bufferArray = new ArrayBuffer(length);
+    const view = new DataView(bufferArray);
+
+    // RIFF chunk descriptor
+    writeString(view, 0, 'RIFF');
+    view.setUint32(4, length - 8, true);
+    writeString(view, 8, 'WAVE');
+
+    // FMT sub-chunk
+    writeString(view, 12, 'fmt ');
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true);
+    view.setUint16(22, numOfChannels, true);
+    view.setUint32(24, buffer.sampleRate, true);
+    view.setUint32(28, buffer.sampleRate * numOfChannels * 2, true);
+    view.setUint16(32, numOfChannels * 2, true);
+    view.setUint16(34, 16, true);
+
+    // Data sub-chunk
+    writeString(view, 36, 'data');
+    view.setUint32(40, length - 44, true);
+
+    // Write PCM samples
+    let offset = 44;
+    for (let i = 0; i < buffer.length; i++) {
+        for (let channel = 0; channel < numOfChannels; channel++) {
+            const sample = buffer.getChannelData(channel)[i] * 32767.5;
+            view.setInt16(offset, sample, true);
+            offset += 2;
+        }
+    }
+
+    return bufferArray;
+}
+
+function writeString(view, offset, string) {
+    for (let i = 0; i < string.length; i++) {
+        view.setUint8(offset + i, string.charCodeAt(i));
+    }
+}
+ count = 0
+// Function to download the audio buffer as a WAV file
+function downloadAudioBuffer(audioBuffer) {
+    const wavData = audioBufferToWav(audioBuffer);
+    const blob = new Blob([wavData], { type: 'audio/wav' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    a.download = count + 'audio.wav';
+    count = count + 1
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+      // Function to download the audio buffer as a WAV file
+      function downloadAudioBuffer(audioBuffer) {
+          const wavData = audioBufferToWav(audioBuffer);
+          const blob = new Blob([wavData], { type: 'audio/wav' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = url;
+          a.download = 'audio.wav';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+      }
+
+      
+      async function main() {
+
+        socket = new WebSocket(`wss://api-stg.hams.ai/talk-bot`);
+        let flag = false
+        
+        socket.onopen = () => {
+          console.log("WebSocket connection established");
+        };
+        socket.onclose = () => {
+          console.log("WebSocket connection closed");
+        };
+        socket.onerror = (error) => {
+          console.log("WebSocket error:", error);
+        };
+        socket.onmessage = async (event) => {
+          const arrayBuffer = await event.data.arrayBuffer();
+          const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+          playAudio(audioBuffer);
+          // Call the download function
+          // downloadAudioBuffer(audioBuffer);
+          flag = false
+        };
+
+        const myvad = await vad.MicVAD.new({
+          onSpeechEnd: (audio) => {
+            // if there audio in progress to send new audio
+            if (audioStreamer.audioQueue.length != 0 || flag)
+              return
+            flag = true
+            // Convert Float32Array to a format suitable for WebSocket transmission
+            const audioBlob = new Blob([audio], { type: "audio/wav" });
+            const reader = new FileReader();
+            reader.readAsArrayBuffer(audioBlob);
+            reader.onloadend = () => {
+              if (socket.readyState === WebSocket.OPEN) {
+                socket.send(reader.result);
+                console.log("Audio sent to the backend");
+              } else {
+                console.log("WebSocket connection is not open");
+              }
+            };
+          },
+        });
+        myvad.start();
+      }
+
+      function toggleMicrophone() {
+        let startButton = document.getElementById("startButton");
+        let icon = startButton.querySelector("i");
+        let messageText = document.getElementById('messageText');
+
+        // Toggle between microphone and loading spinner icon
+        if (icon.classList.contains("fa-microphone")) {
+          icon.classList.remove("fa-microphone");
+          icon.classList.add("fa-spinner", "fa-spin");
+          messageText.textContent = '... تحدث الأن'; 
+          main();
+        } else if (icon.classList.contains("fa-spinner")) {
+          icon.classList.remove("fa-spinner", "fa-spin");
+          icon.classList.add("fa-microphone");
+          messageText.textContent = 'اضغط المايك لبدء المكالمة'; 
+        }
+      }
+
+      document
+        .getElementById("startButton")
+        .addEventListener("click", toggleMicrophone);
+    </script>
+  </body>
+</html>
