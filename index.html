@@ -5,7 +5,28 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-  <title>Document</title>
+  <title>Hams.AI | همـس </title>
+  <!-- Favicon Link -->
+  <link rel="icon" class="circular-icon" type="image/png" href="https://hams.ai/icons/icon-144x144.png?v=4a451a015d5a93459928c31f8c02b8d4" />
+  <!-- Viewport for responsive design -->
+  
+  <!-- Charset for character encoding -->
+  <meta charset="UTF-8">
+    <!-- Meta Description -->
+    <meta name="description" content="مع همس يمكنك  اتسقبال الطلبات و الاستفسارات الهاتفية تلقائيًا بدون تدخل بشري، مما يقلل التكاليف التشغيلية ويضمن خدمة العملاء 24/7 على مدار الساعة طوال أيام الأسبوع">
+
+    <!-- Keywords -->
+    <meta name="keywords" content="ذكاء أصطناعي, همس, الرد على العملاء تلقائيًا, Hams.Ai ">
+  
+    <!-- Author -->
+    <meta name="author" content="hams.ai">
+  
+    <!-- Open Graph Meta Tags (for better sharing on social media) -->
+    <meta property="og:title" content="تجربة الرد الألي مع شركة همس للذكاء الاصطناعي ">
+    <meta property="og:description" content="يمكن الأن حجز موعد تلقائيًا بدون في دقائق بدون تدخل بشري و بأقل وقت ممكن">
+    <meta property="og:image" content="https://hams.ai/icons/icon-144x144.png?v=4a451a015d5a93459928c31f8c02b8d4">
+    <meta property="og:url" content="https://hams.ai/">
+    <meta property="og:type" content="website">
   <style>
     body {
       background-color: #0b0b0d;
@@ -279,19 +300,34 @@
         console.log("WebSocket error:", error);
       };
       socket.onmessage = async (event) => {
-        flag = true
-        // Create a Blob from the received audio data
+        flag = true;
         const audioBlob = new Blob([event.data], { type: 'audio/wav' });
         const audioUrl = URL.createObjectURL(audioBlob);
 
-        // Get the audio element and set its source
+        // Workaround for iOS Safari to handle the audio context
         const audioPlayer = document.getElementById('audioPlayer');
-        audioPlayer.src = audioUrl;
-        audioPlayer.play().catch(error => console.error("Audio play error:", error));
+        const playAudio = () => {
+            audioPlayer.src = audioUrl;
+            audioPlayer.play().catch(error => console.error("Audio play error:", error));
+        };
+
+        if (typeof window.webkitAudioContext !== 'undefined') {
+            // iOS Safari-specific context setup
+            const context = new (window.AudioContext || window.webkitAudioContext)();
+            const source = context.createBufferSource();
+            source.buffer = await context.decodeAudioData(await fetch(audioUrl).then(res => res.arrayBuffer()));
+            source.connect(context.destination);
+            source.start(0);
+        } else {
+            // Other browsers
+            playAudio();
+        }
 
         console.log("Audio received and played");
         flag = false;
       };
+
+
 
       const myvad = await vad.MicVAD.new({
         onSpeechEnd: (audio) => {
