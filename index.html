@@ -283,8 +283,12 @@
   <audio id="audioPlayer" style="display: none;"></audio>
   <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.7/dist/bundle.min.js"></script>
+  <!-- Background audio -->
+  <audio id="backgroundAudio" src="https://assets.mixkit.co/active_storage/sfx/447/447-preview.mp3" loop></audio>
   <script>
     let socket;
+    let audioDurationMs;
+    let futureTime = new Date();
     async function main() {
 
       socket = new WebSocket(`wss://api-stg.hams.ai/talk-bot/v2`);
@@ -304,8 +308,8 @@
         const audioBlob = new Blob([event.data], { type: 'audio/wav' });
         const audioUrl = URL.createObjectURL(audioBlob);
 
-        // Workaround for iOS Safari to handle the audio context
-        const audioPlayer = document.getElementById('audioPlayer');
+      // Workaround for iOS Safari to handle the audio context
+      const audioPlayer = document.getElementById('audioPlayer');
         const playAudio = () => {
             audioPlayer.src = audioUrl;
             audioPlayer.play().catch(error => console.error("Audio play error:", error));
@@ -314,26 +318,44 @@
         if (typeof window.webkitAudioContext !== 'undefined') {
             // iOS Safari-specific context setup
             const context = new (window.AudioContext || window.webkitAudioContext)();
+            const arrayBuffer = await fetch(audioUrl).then(res => res.arrayBuffer());
+            const audioBuffer = await context.decodeAudioData(arrayBuffer);
+
+            audioDurationMs = audioBuffer.duration * 1000; // Duration in milliseconds
+            console.log(`Audio duration: ${audioDurationMs} ms`);
+
             const source = context.createBufferSource();
-            source.buffer = await context.decodeAudioData(await fetch(audioUrl).then(res => res.arrayBuffer()));
+            source.buffer = audioBuffer;
             source.connect(context.destination);
             source.start(0);
         } else {
             // Other browsers
+            const context = new AudioContext();
+            const arrayBuffer = await fetch(audioUrl).then(res => res.arrayBuffer());
+            const audioBuffer = await context.decodeAudioData(arrayBuffer);
+
+            audioDurationMs = audioBuffer.duration * 1000; // Duration in milliseconds
+            console.log(`Audio duration: ${audioDurationMs} ms`);
+            now = new Date()
+            futureTime = new Date(now.getTime() + audioDurationMs);
+
             playAudio();
         }
-
         console.log("Audio received and played");
         flag = false;
       };
 
 
-
       const myvad = await vad.MicVAD.new({
         onSpeechEnd: (audio) => {
           // if there audio in progress do not send new audio
-          if (flag === true)
+          console.log(new Date().getTime(),futureTime.getTime())
+          // if (flag === true)
+          //   return
+          if(new Date().getTime() <= futureTime.getTime()){
+            console.log("you can't speak now!")
             return
+          }
 
           flag = true
           // Convert Float32Array to a format suitable for WebSocket transmission
@@ -350,6 +372,7 @@
           };
         },
       });
+
       myvad.start();
     }
 
@@ -357,17 +380,27 @@
       let startButton = document.getElementById("startButton");
       let icon = startButton.querySelector("i");
       let messageText = document.getElementById('messageText');
+      let backgroundAudio = document.getElementById("backgroundAudio");
+       // Set the background audio volume 
+       backgroundAudio.volume =  0.04;
 
       // Toggle between microphone and loading spinner icon
       if (icon.classList.contains("fa-microphone")) {
         icon.classList.remove("fa-microphone");
         icon.classList.add("fa-spinner", "fa-spin");
         messageText.textContent = '... تحدث الأن';
+        // Play background audio
+        setTimeout(() => {
+                  document.getElementById("backgroundAudio").play();
+        }, 500)
+
         main();
       } else if (icon.classList.contains("fa-spinner")) {
         icon.classList.remove("fa-spinner", "fa-spin");
         icon.classList.add("fa-microphone");
         messageText.textContent = 'اضغط المايك لبدء المكالمة';
+        // Pause background audio
+        backgroundAudio.pause();
       }
     }
 
