@@ -291,7 +291,20 @@
     let futureTime = new Date();
     async function main() {
 
-      socket = new WebSocket(`wss://api-stg.hams.ai/talk-bot/v2`);
+      // Get the current URL from the browser
+      const url = window.location.href;
+
+      // Create a URL object from the current URL
+      const urlObj = new URL(url);
+
+      // Use URLSearchParams to get the value of 'agent_id'
+      const agentId = urlObj.searchParams.get("agent_id");
+
+      // Output the result to the console or use it as needed
+      console.log(agentId);
+
+      // socket = new WebSocket(`wss://api-stg.hams.ai/talk-bot/v2`);
+      socket = new WebSocket(`wss://api-stg.hams.ai/agents/${agentId}`);
       let flag = false
 
       socket.onopen = () => {
